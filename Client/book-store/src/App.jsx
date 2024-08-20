@@ -1,33 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [ book, setBook] = useState([])
+  useEffect(
+    () => {
+      fetchBook()
+      },[]
+  )
+  const fetchBook = async ()=>{
+    try{
+      const response = await fetch('http://127.0.0.1:8000/api/book/')
+      const data = response.json()
+      setBook(data)
+    } catch(err){
+      console.log(err)
+    }
+
+  }
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <input type='text' placeholder='Book Title'/>
+        <input typep='text' placeholder='Book Received Date'/>
+        <button >Submit</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div>
+        {book.map(()=>{
+          return (<>
+            <div >{book.title}</div>
+            <div>{book.received_date}</div>
+            </>
+          )
+
+        })}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
